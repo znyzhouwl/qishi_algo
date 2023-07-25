@@ -1,0 +1,20 @@
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        maps = collections.defaultdict(list)
+        for u,v in edges:
+            maps[u].append(v)
+            maps[v].append(u)
+      
+        visited = set([source])
+        cur = collections.deque([source])
+        while cur:
+            new = cur.popleft()
+           
+            if new == destination:
+                return True
+            
+            for v in maps[new]:
+                if v not in visited:
+                    visited.add(v)
+                    cur.append(v)
+        return False
