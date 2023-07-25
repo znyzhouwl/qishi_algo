@@ -1,0 +1,23 @@
+class Solution:
+    def longestPath(self, parent: List[int], s: str) -> int:
+        maps = collections.defaultdict(list)
+        n = len(parent)
+        for i in range(1,n):
+            maps[parent[i]].append((i, s[i]))
+        ans = 1
+        visited = set()
+        @cache
+        def dfs(i):
+            nonlocal ans
+            visited.add(i)
+            res = [1,1]
+            for v, char in maps[i]:
+                if char != s[i]:
+                    res.append(1 + dfs(v)[0])
+            res = sorted(res,reverse=True)[:2]
+            ans = max(ans, sum(res)-1)
+            return res
+        for i in range(n):
+            if i not in visited:
+                dfs(i)
+        return ans
