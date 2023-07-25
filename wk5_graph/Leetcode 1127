@@ -1,0 +1,28 @@
+class Solution:
+    def shortestAlternatingPaths(self, n: int, redEdges: List[List[int]], blueEdges: List[List[int]]) -> List[int]:
+        maps = {}
+        maps[0] = collections.defaultdict(list)
+        maps[1] = collections.defaultdict(list)
+        for u,v in redEdges:
+            maps[0][u].append(v)
+        for u,v in blueEdges:
+            maps[1][u].append(v)
+        def bfs(i,j,c):
+            visited = set()
+            queue = collections.deque([(i,c,0)])
+            while queue:
+                cur, col, d = queue.popleft()
+                visited.add((cur, col))
+                if cur == j:
+                    return d
+                for v in maps[col][cur]:
+                    if (v, 1-col) not in visited:
+                        queue.append((v,1-col,d+1))
+            return float("inf")
+        
+        ans = [0] * n
+        for i in range(n):
+            ans[i] = min(bfs(0,i,0), bfs(0,i,1))
+            if ans[i] == float("inf"):
+                ans[i] = -1
+        return ans
