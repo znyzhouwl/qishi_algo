@@ -1,0 +1,24 @@
+class Solution(object):
+    def findJudge(self, N, trust):
+        """
+        :type N: int
+        :type trust: List[List[int]]
+        :rtype: int
+        """
+        if N == 1:
+            return 1
+        degree_in = [0] * (N+1)
+        degree_out = [0] * (N+1)
+        for (u,v) in trust:
+            degree_in[v] += 1
+            degree_out[u] += 1
+        count = 0
+        res = []
+        for i,cur in enumerate(degree_in):
+            if degree_in[i] == (N-1) and degree_out[i] == 0:
+                count += 1
+                res.append(i)
+        if count == 1:
+            return res[0]
+        else:
+            return -1
