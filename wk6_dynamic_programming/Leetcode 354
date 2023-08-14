@@ -1,0 +1,24 @@
+class Solution:
+    def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
+        envelopes.sort(key=lambda x: (x[0], -x[1]))
+        def helper(v, nums, n):
+            l, r = 0, n
+            
+            while l < r:
+                mid = (l + r) // 2
+                if v > nums[mid]:
+                    l = mid + 1
+                else:
+                    r = mid
+            return l
+        min_height, n = [0], 1
+        for v in envelopes:
+            
+            if v[1] > min_height[-1]:
+                min_height.append(v[1])
+                n += 1
+            else:
+                p = helper(v[1], min_height, n)
+                min_height[p] = v[1]
+
+        return n-1
