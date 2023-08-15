@@ -1,0 +1,17 @@
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        
+        
+        def dfs(cur, index):
+            if len(cur) == len(nums):
+                output.append(cur)
+                return
+            new = 11
+            for i in range(len(nums)):
+                if i not in index and nums[i] != new:
+                    new = nums[i]
+                    dfs(cur + [new], index + [i])
+        nums.sort()
+        output = []
+        dfs([],[])
+        return output
