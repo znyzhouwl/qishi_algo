@@ -1,0 +1,14 @@
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        time = []
+        for s, e in intervals:
+            time.append((s, 1))
+            time.append((e, -1))
+        time.sort()
+        res = 0
+        cur = 0
+        for t, v in time:
+            cur += v
+            if cur > res:
+                res = cur
+        return res
