@@ -1,0 +1,35 @@
+class Solution:
+    def maximumBeauty(self, flowers: List[int], newFlowers: int, target: int, full: int, partial: int) -> int:
+        flowers.sort()
+        n = len(flowers)
+        
+        full_needed = [0] * (n+1)
+        small_needed = [0] * n
+        cur, v = 0, 0
+        for i in range(n):
+            v += i * (flowers[i] - cur)
+            small_needed[i] = v
+            cur = flowers[i]
+        v = 0
+        for i in range(n-1,-1,-1):
+            v += max(target - flowers[i], 0)
+            full_needed[i] = v
+        if full_needed[0] == 0:
+            return n * full
+        if full_needed[0] <= newFlowers:
+            return max(n * full, (n-1) * full + (target-1)*partial)
+        
+        i, j, res = 0, 0, 0
+        
+        while j <= n:
+            if small_needed[i] + full_needed[j] > newFlowers:
+                j += 1
+            else:
+                while i < j and small_needed[i] + full_needed[j] <= newFlowers:
+                    i += 1
+                i -= 1
+                max_small = flowers[i] + (newFlowers - full_needed[j] - small_needed[i]) // (i+1)
+                res = max(res, (n-j) * full + max_small * partial)
+                
+                j += 1
+        return res
