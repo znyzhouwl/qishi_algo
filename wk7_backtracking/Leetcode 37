@@ -1,0 +1,40 @@
+class Solution(object):
+    def solveSudoku(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: None Do not return anything, modify board in-place instead.
+        """
+        space = set()
+        for  i in xrange(1,10):
+            space.add(str(i))
+        def Position(board,i,j):
+            base = set()
+            for l in xrange(9):
+                if board[i][l] != ".":
+                    base.add(board[i][l])
+                if board[l][j] != ".":
+                    base.add(board[l][j])
+            a, b = i//3, j//3
+            for l in xrange(3*a,3*(a+1)):
+                for k in xrange(3*b,3*(b+1)):
+                    if board[l][k] != ".":
+                        base.add(board[l][k])
+            return space.difference(base)
+        def backtrack(board,index):
+            if index == 81:
+                return True
+            a,b = divmod(index,9)
+            if board[a][b] != ".":
+                return backtrack(board,index + 1)
+            else:
+                choice = Position(board,a,b)
+                if len(choice) == 0:
+                    return False
+                else:
+                    for val in choice:
+                        board[a][b] = val
+                        if backtrack(board,index+1):
+                            return True
+                    board[a][b] = "."
+                    return False
+        backtrack(board,0)
